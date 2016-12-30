@@ -1,48 +1,27 @@
-walk(document.body);
-setTimeout(function () {
-	walk(document.body);
-}, 1000);
+$(document).ready(blockAdBlockerBlocker)
+$(window).on("load", blockAdBlockerBlocker);
 
-function walk(node)
+function blockAdBlockerBlocker(node)
 {
-	// Source: http://is.gd/mwZp7E
+	setTimeout(function () {
+		let pageBody = $('body'),
+				bodyClasses = pageBody[0].classList,
+				arrayLength = bodyClasses.length;
 
-	var child, next;
+		for (i = 0; i < arrayLength; i++) {
+			let curClassName = bodyClasses[i];
+		  if ( !curClassName.match('modal') ) { continue; }
 
-	switch ( node.nodeType )
-	{
-		case 1:  // Element
-		case 9:  // Document
-		case 11: // Document fragment
-			child = node.firstChild;
-			while ( child )
-			{
-				next = child.nextSibling;
-				walk(child);
-				child = next;
-			}
-			break;
+		  pageBody.removeClass(curClassName);
 
-		case 3: // Text node
-			handleText(node);
-			break;
-	}
-}
+		  let modalClassName = curClassName.replace('-open', ''),
+		  		modalObj = $('.' + modalClassName);
 
-function handleText(textNode)
-{
-	var v = textNode.nodeValue;
+  		if ( modalObj.length === 0 ) { return; }
+			modalObj.remove();
 
-	v = v.replace(/\bTrump\b/g, "Drumpf");
-	v = v.replace(/\bTRUMP\b/g, "DRUMPF");
-	v = v.replace(/\bTRUMPS\b/g, "DRUMPFS");
-	v = v.replace(/\bTrumps\b/g, "Drumpfs");
-	v = v.replace(/\bdonaldjtrump\b/g, "donaldjdrumpf");
-	v = v.replace(/\bdonaldtrump\b/g, "donalddrumpf");
-	v = v.replace(/\brealdonaldtrump\b/g, "realdonalddrumpf");
-	v = v.replace(/\brealDonaldTrump\b/g, "realDonaldDrumpf");
-	v = v.replace(/\bMake America Great Again\b/g, "Make Donald Drumpf Again");
-	v = v.replace(/\bMake America Great Again!\b/g, "Make Donald Drumpf Again!");
-
-	textNode.nodeValue = v;
+			let modalPrefix = curClassName.substr(0, curClassName.indexOf('-modal'));
+		  $("*[class^='" + modalPrefix + "-']").remove();
+		}
+	}, 1000);
 }
